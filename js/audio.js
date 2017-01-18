@@ -37,36 +37,6 @@ return  window.requestAnimationFrame       ||
 })();
 
 
-function playSound(buffer, time) {
-  var source = context.createBufferSource();
-  source.buffer = buffer;
-  source.connect(context.destination);
-  source[source.start ? 'start' : 'noteOn'](time);
-}
-
-function loadSounds(obj, soundMap, callback) {
-  // Array-ify
-  var names = [];
-  var paths = [];
-  for (var name in soundMap) {
-    var path = soundMap[name];
-    names.push(name);
-    paths.push(path);
-  }
-  bufferLoader = new BufferLoader(context, paths, function(bufferList) {
-    for (var i = 0; i < bufferList.length; i++) {
-      var buffer = bufferList[i];
-      var name = names[i];
-      obj[name] = buffer;
-    }
-    if (callback) {
-      callback();
-    }
-  });
-  bufferLoader.load();
-}
-
-
 
 
 function BufferLoader(context, urlList, callback) {
@@ -116,8 +86,9 @@ BufferLoader.prototype.load = function() {
   this.loadBuffer(this.urlList[i], i);
 };
 
-
-//~ var soundVolume = 0
+/**
+ * 
+ */
 function RapidSoundsSample(context, theSound = 'medias/dart2.mp3', soundVolume = 1) {
   var ctx = this;
   var loader = new BufferLoader(context, [theSound], onLoaded);
@@ -147,8 +118,10 @@ RapidSoundsSample.prototype.shootRound = function(type, rounds, interval, soundV
   }
 }
 
+/**
+ * 
+ */
 RapidSoundsSample.prototype.makeSource = function(buffer, soundVolume) {
-    //~ console.log(soundVolume)
   var source = context.createBufferSource();
   var gain = context.createGain();
   gain.gain.value = soundVolume;
@@ -167,12 +140,9 @@ RapidSoundsSample.prototype.makeSource = function(buffer, soundVolume) {
   return source;
 };
 
+/**
+ * 
+ */
 RapidSoundsSample.prototype.toggleCompressor = function() {
   this.isCompressed = !this.isCompressed;
 }
-
-
-
-
-
-
