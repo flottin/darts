@@ -21,9 +21,16 @@
 
 [x] This is a complete item
 [ ] This is an incomplete item
-[ ] 
+[x] This is a complete item
+[ ] This is an incomplete item
+[x] This is a complete item
+[ ] This is an incomplete item
+[x] This is a complete item
+[ ] This is an incomplete item
 
 add a change for this file
+
+
 
 * Item 1
 * Item 2
