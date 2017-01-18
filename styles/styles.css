@@ -1,0 +1,272 @@
+body{
+    margin:0;
+    padding:0; 
+    font-size: 3em;
+    font-family: arial;
+    position: fixed;
+    background : #262626;
+}
+
+/**
+* index page
+*/
+        
+.leftBlock{
+    width: 65%;
+    text-align : center;
+    float: left;
+}
+
+.rightBlock{
+    text-align: right;
+}
+
+.p1ResultBlock{
+    font-size: 0.9em;
+    text-align: center;
+    margin: 8px;
+    padding: 0;
+    width: 100%;
+}
+
+#monbloc .numbers{
+    text-align: center;
+    padding :Opx 93px 0 93px;
+}
+
+#monbloc button{
+    -webkit-appearance: none;
+    border-radius: 0px;
+    border-color: black ;
+    font-size: 1.1em;
+    width : 140px;
+    height: 140px;
+    text-align: center;
+    padding : 0;
+    margin: 0;
+    border-style: solid;
+    background-color: black;
+    color: grey;
+    border-width: 1px;
+}
+
+.p2ResultBlock{
+    font-size: 0.9em;
+    width: 100%;
+    margin: 8px;
+    padding: 0px;
+}
+
+.player1Name{
+    font-size: 0.7em;
+
+}
+
+.player2Name{
+    font-size: 0.7em;
+}
+
+
+
+#monbloc .numberPlayLeftP1{
+    font-size: 1.2em;
+}
+
+#monbloc .numberPlayLeftP2{
+    font-size: 1.2em;
+}
+#monbloc .button{
+    margin: 0;
+    padding:2px;
+    display: inline-block;
+    overflow: hidden;
+    width: 109px;
+    height: 109px
+}
+
+#monbloc .buttonEmpty{
+    border-width: 1px;
+    border-style: solid;
+    -webkit-appearance: none;
+    border-radius: 4px;
+    border-color: #553100 ;
+    font-size: 1.1em;
+    width : 104px;
+    height: 104px;
+    text-align: center;
+    background-color: #D4A76A;
+    color: #553100;
+    margin:0;
+    padding: 0px;
+    display: inline-block;
+
+
+}
+
+
+#monbloc { 
+    background-color:grey; 
+    color:#FFFFFF; 
+    text-align:center; 
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin:-100px 0 0 -300px;
+    width:50%;
+    height:140px;
+/*
+    display:none;
+*/
+
+}
+
+
+
+
+
+ .playerStart{
+    position: absolute;
+    width:100%;
+    height:1100%;
+    text-align: center;
+    background: black;
+    opacity: 0.9;
+/*
+    display:none;
+*/
+ }
+         
+
+
+/**
+* dart page
+*/
+
+.left{
+    width: 50%;
+    text-align : right;
+    float: left;
+    
+}
+
+.right{
+}
+
+input{
+    font-size: 1.2em;
+    text-align: center;
+    margin: 15px;
+}
+
+.numbers{
+    text-align: center;
+    padding :Opx 93px 0 93px;
+}
+
+button{
+    -webkit-appearance: none;
+    border-radius: 8px;
+    border-color: grey ;
+    font-size: 1.1em;
+    width : 110px;
+    height: 110px;
+    text-align: center;
+    padding : 0;
+    margin: 0;
+    border-style: solid;
+   
+    color: #64BAF4;
+    border-width: 3px;
+ }
+ 
+.numberPlayLeftP1{
+    font-size: 1.2em;
+}
+
+.playAgain{
+    display: none;
+}
+
+.numberPlayLeftP2{
+    font-size: 1.2em;
+}
+.button{
+    margin: 0;
+    padding:2px;
+    display: inline-block;
+    overflow: hidden;
+    width: 109px;
+    height: 109px
+}
+
+.buttonEmpty{
+    border-width: 1px;
+    border-style: solid;
+    -webkit-appearance: none;
+    border-radius: 8px;
+    border-color: #64BAF4 ;
+    font-size: 1.1em;
+    width : 104px;
+    height: 104px;
+    text-align: center;
+
+    background-color: #64BAF4;
+    color: #553100;
+    margin:0;
+    padding: 0px;
+    display: inline-block;
+    
+    
+ }
+ 
+ 
+ .gameNumber{
+    display:none;
+ }
+ 
+ .playerWinBackground{
+    position: absolute;
+    width:100%;
+    height:1000%;
+    text-align: center;
+    background: black;
+    opacity: 0.9;
+    display:none;
+ }
+ 
+.playerWin{
+    padding :100px 0 0 0;
+    margin :100px 0 0 0;
+    position: absolute;
+    width:100%;
+    height:100%;
+    text-align: center;
+    color : white;
+/*
+    background: black;
+*/
+    opacity: 1;
+    display:none;
+ }
+ 
+ .newButton{
+    text-decoration:none;
+    border-width: 1px;
+    border-style: solid;
+    -webkit-appearance: none;
+    border-radius: 8px;
+    border-color: #64BAF4 ;
+    font-size: 1.1em;
+    width : 104px;
+    height: 104px;
+    text-align: center;
+    background-color: #64BAF4;
+    color: #553100;
+    margin:0;
+    padding: 0px;
+    display: inline-block;
+ }
+ 
+
+
+
