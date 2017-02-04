@@ -4,7 +4,7 @@ body{
     font-size: 3em;
     font-family: arial;
     position: fixed;
-    background : #262626;
+    background : black;
 }
 
 /**
@@ -130,7 +130,7 @@ body{
     height:1100%;
     text-align: center;
     background: black;
-    opacity: 0.9;
+    opacity: 1;
 /*
     display:none;
 */

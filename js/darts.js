@@ -20,42 +20,32 @@ var scoreP2             = 0;
 var game                = 301
 var buttonEnable = true;
 var gameSet             = 1;
+var lastMulti           = 1;
 
-/**
-* load game on document load
-*/
+/*
+ * load game on document load
+ */
 $(document).ready(function() { 
     initSounds(); 
     buttonFactory();
     initGame();
+    $('body').css({'background-color' : '#262626'})
+    
 });
 
-/**
-* init Sounds
-*/
+/*
+ * init Sounds
+ */
 initSounds = function(){
-    sampleChangePlayer  = new RapidSoundsSample(
-        context, 
-        'medias/changePlayer.mp3', 0.1
-        );
-    sample  = new RapidSoundsSample(
-        context, 
-        'medias/dart2.mp3', 1
-    );
-    sampleplayer1  = new RapidSoundsSample(
-        context, 
-        'medias/testoo.mp3', 1
-    );
-    sampleplayer2  = new RapidSoundsSample(
-        context, 
-        'medias/rouge.low.mp3', 1
-    );
-
+    sampleChangePlayer  = new RapidSoundsSample('medias/changePlayer.mp3', 0.3);
+    sample  = new RapidSoundsSample('medias/dart2.mp3', 0.2);
+    sampleplayer1  = new RapidSoundsSample('medias/testoo.mp3', 1);
+    sampleplayer2  = new RapidSoundsSample('medias/rouge.low.mp3', 1);
 }
 
-/**
-* init game
-*/
+/*
+ * init game
+ */
 initGame = function(){
     buttonEnable        = true;
     gameSet             = 1;
@@ -84,7 +74,7 @@ initGame = function(){
 
 }
 
-/**
+/*
  * button factory 
  */
 buttonFactory = function(){
@@ -107,7 +97,7 @@ buttonFactory = function(){
     $( ".startButton" ).on( "touchstart click", savePlayers );
 }
 
-/**
+/*
  * create button
  */
 createButton = function (i,  buttonName = '', buttonId = ''){
@@ -122,7 +112,7 @@ createButton = function (i,  buttonName = '', buttonId = ''){
     $( "#"+buttonId ).on( "touchstart click", PlaySound );        
 }
 
-/**
+/*
  * create empty button
  */
 createButtonEmpty = function (i,buttonName){
@@ -133,19 +123,18 @@ createButtonEmpty = function (i,buttonName){
     newButton.appendTo("#"+buttonName+i).html(  "&nbsp;" );
 }
 
-/**
-* ucfirst the name
-*/
+/*
+ * ucfirst the name
+ */
 function ucfirst (str) {
   str += ''
   var f = str.charAt(0).toUpperCase();
-  console.log(f)
   return f + str.substr(1).toLowerCase();
 }
 
-/**
-* save Player name
-*/
+/*
+ * save Player name
+ */
 savePlayers = function(ev){
     if($('.p1ResultBlock').val() =='') p1Name = "Player 1"
     else p1Name = ucfirst($('.p1ResultBlock').val());
@@ -157,20 +146,37 @@ savePlayers = function(ev){
     setTimeout(hideSplash, 500);
 }
 
-/**
-* save Player name
-*/
+/*
+ * save Player name
+ */
 hideSplash = function(ev){
     $('.playerStart').hide();
     $('.start').hide();
 
 } 
 
-/**
-* minus the score
-*/
+/*
+ * change player when a bad score was done
+ * score = 1
+ * score < 0
+ * last score was not multiplied by 2
+ */
+endError = function(){
+    result=lastScore;
+    numberPlay = 3;
+    initDarts();
+    buttonEnable = false;
+    $(playerResult).val(result);
+    setTimeout(changePlayer, 500);
+}
+
+
+/*
+ * minus the score
+ */
 minusResult = function(ev){
     ev.preventDefault();
+    lastMulti = 1
 
     if ( buttonEnable == true){
         $(this).css({'background-color' : 'white'});
@@ -193,22 +199,27 @@ minusResult = function(ev){
     if (numberPlay == 3){
         lastScore = $(playerResult).val() ;
     }
+    lastMulti = multi 
     result =  $(playerResult).val() - (multi * keyMark);
     saveData();
 
     // initialize multi
     multi = 1
-    
+    if (result==1){
+        endError()
+        return false;
+    }
     if (result == 0){
+        if(lastMulti == 2){
         endGame();
+        }else{
+            endError()
+        }
         return true;
     }else if (result < 0 ){
-        result=lastScore;
-        numberPlay = 3;
-        initDarts();
-        buttonEnable = false;
-        setTimeout(changePlayer, 500);
+        endError()
     }else{
+        
         numberPlay--;
         if (result > 0){
             initDarts();
@@ -231,7 +242,7 @@ minusResult = function(ev){
     
 }
 
-/**
+/*
  * avoid double tap zoom on ipad and iphone
  */
  $(this).bind('touchstart', function preventZoom(e) {
@@ -247,7 +258,7 @@ minusResult = function(ev){
     $(this).trigger('click').trigger('click');
 });
 
-/**
+/*
  * play sound calling lib audio.js
  */
 function PlaySound() {
@@ -256,32 +267,32 @@ function PlaySound() {
     }
 }
 
-/**
+/*
  * play sound calling lib audio.js
  */
 function PlaySoundChangePlayer() {
     sampleChangePlayer.shootRound(0.5);
 }
 
-/**
- * 
+/*
+ * play sound when won
  */
 function playSoundWin(currentPlayer) {
     playerSample = eval('sample'+currentPlayer)
     playerSample.shootRound()
 }
 
-/**
- * 
+/*
+ * stop sound of winner
  */
 function stopSoundWin(currentPlayer) {
     playerSample = eval('sample'+currentPlayer)
     playerSample.stop()
 }
 
-/**
-* 
-*/
+/*
+ * manage click on x2 or x3 button
+ */
 multiScore = function(evt){
     evt.preventDefault();
     multiManage();
@@ -290,17 +301,17 @@ multiScore = function(evt){
     multi = parseInt($(this)[0].id);
 }
 
-/**
-* manage the button multiply
-*/
+/*
+ * manage the button multiply
+ */
 multiManage = function(evt){
     $(".keyMulti").css({'background-color' : p1Color});
 }
 
 
-/**
-* display congratulations 
-*/
+/*
+ * display congratulations 
+ */
 endGame = function(){
     $('.playerWinBackground').show();
     playSoundWin(currentPlayer)
@@ -337,9 +348,9 @@ endGame = function(){
     }
 }
 
-/**
-* save data with ajax
-*/
+/*
+ * save data with ajax 
+ */
 saveData = function(){
     url="darts_save.php";
     data = 'gameNumber=' + $(".gameNumber")[0].innerText;
@@ -360,9 +371,9 @@ saveData = function(){
     });	
 }
 
-/**
-* change the player 
-*/
+/*
+ * change the player 
+ */
 changePlayer = function(){
     buttonEnable =true;
     PlaySoundChangePlayer();
@@ -382,51 +393,56 @@ changePlayer = function(){
     remainingDarts();
 }
 
-/**
-* init darts
-*/
+/*
+ * init darts
+ */
 initDarts = function(){
     $(".numberPlayLeftP1")[0].innerText = "";
     $(".numberPlayLeftP2")[0].innerText = "";
 }
 
-/**
-* remaining darts
-*/
+/*
+ * repeat a string
+ */
+strRepeat = function(str, count){
+    strOut = '' 
+    for (i=1; i<=count; i++){
+        strOut = strOut + str;
+    }
+    return strOut;
+}
+
+/*
+ * remaining darts
+ */
 remainingDarts = function(){
     initDarts();
     if ('player1' == currentPlayer){
-        if (numberPlay == 3) numberPlayLeftP1= "...";
-        if (numberPlay == 2) numberPlayLeftP1= "..";
-        if (numberPlay == 1) numberPlayLeftP1= ".";
-        if (numberPlay == 0) numberPlayLeftP1= "";
-        $(".numberPlayLeftP1")[0].innerText = numberPlayLeftP1 
+        numberPlayLeftP1 = ""
+        $(".numberPlayLeftP1")[0].innerText = strRepeat('.', numberPlay); 
     }else {
         if (numberPlay == 3) numberPlayLeftP2= "...";
-        if (numberPlay == 2) numberPlayLeftP2= "..";
-        if (numberPlay == 1) numberPlayLeftP2= ".";
-        if (numberPlay == 0) numberPlayLeftP2= "";
-        $(".numberPlayLeftP2")[0].innerText = numberPlayLeftP2       
+        $(".numberPlayLeftP2")[0].innerText = strRepeat('.', numberPlay);       
     }
 }
 
-/**
- * 
+/*
+ * click on yes button on win screen
  */
  $('.yes').on( "click", function() {
     stopSoundWin(currentPlayer);
     initGame();
 });
 
-/**
- * 
+/*
+ * click on no button on win screen
  */
  $('.no').on( "click", function() {
     window.location.replace('./')
 });
 
-/**
- * 
+/*
+ * click on play again button on win screen
  */
  $('.playAgain').on( "click touchstart", function() {
     window.location.replace('./')
