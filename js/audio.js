@@ -24,27 +24,14 @@ if (!context.createDelay)
 if (!context.createScriptProcessor)
   context.createScriptProcessor = context.createJavaScriptNode;
 
-// shim layer with setTimeout fallback
-window.requestAnimFrame = (function(){
-return  window.requestAnimationFrame       || 
-  window.webkitRequestAnimationFrame || 
-  window.mozRequestAnimationFrame    || 
-  window.oRequestAnimationFrame      || 
-  window.msRequestAnimationFrame     || 
-  function( callback ){
-  window.setTimeout(callback, 1000 / 60);
-};
-})();
-
-
-
 
 function BufferLoader(context, urlList, callback) {
-  this.context = context;
-  this.urlList = urlList;
-  this.onload = callback;
-  this.bufferList = new Array();
-  this.loadCount = 0;
+  this.context      = context;
+  this.urlList      = urlList;
+  this.onload       = callback;
+  this.bufferList   = new Array();
+  this.loadCount    = 0;
+  this.source       = null ;
 }
 
 BufferLoader.prototype.loadBuffer = function(url, index) {
@@ -87,7 +74,7 @@ BufferLoader.prototype.load = function() {
 };
 
 /**
- * 
+ * init the sound
  */
 function RapidSoundsSample(context, theSound = 'medias/dart2.mp3', soundVolume = 1) {
   var ctx = this;
@@ -96,53 +83,31 @@ function RapidSoundsSample(context, theSound = 'medias/dart2.mp3', soundVolume =
   function onLoaded(buffers) {
     ctx.buffers = buffers;
   };
-  
   soundVolume = soundVolume;
 
   loader.load();
 
-  this.isCompressed = true;
-}
-
-RapidSoundsSample.prototype.shootRound = function(type, rounds, interval, soundVolume = 1, random, random2) {
-  if (typeof random == 'undefined') {
-    random = 0;
-  }
-  var time = context.currentTime;
-  // Make multiple sources using the same buffer and play in quick succession.
-  for (var i = 0; i < rounds; i++) {
-    var source = this.makeSource(this.buffers[type], soundVolume);
-    if (random2)
-      source.playbackRate.value = 1 + Math.random() * random2;
-    source[source.start ? 'start' : 'noteOn'](time + i * interval + Math.random() * random);
-  }
 }
 
 /**
- * 
- */
-RapidSoundsSample.prototype.makeSource = function(buffer, soundVolume) {
-  var source = context.createBufferSource();
-  var gain = context.createGain();
-  gain.gain.value = soundVolume;
-  source.buffer = buffer;
-  source.connect(gain);
-  if (this.isCompressed) {
-    var compressor = context.createDynamicsCompressor();
-    compressor.threshold.value = -10;
-    compressor.ratio.value = 20;
-    compressor.reduction.value = -20;
-    gain.connect(compressor);
-    compressor.connect(context.destination);
-  } else {
+* start sound
+*/
+RapidSoundsSample.prototype.shootRound = function(soundVolume = 1) {
+    var time = context.currentTime;
+    this.source = context.createBufferSource();
+    var gain = context.createGain();
+    gain.gain.value = soundVolume;
+    this.source.buffer = this.buffers[0];
+    this.source.connect(gain);
     gain.connect(context.destination);
-  }
-  return source;
-};
+    this.source.start(0)
+    
+}
 
 /**
- * 
+ * stop current sound
  */
-RapidSoundsSample.prototype.toggleCompressor = function() {
-  this.isCompressed = !this.isCompressed;
+RapidSoundsSample.prototype.stop = function(audioSrc) {
+  this.source.stop();
 }
+

@@ -4,8 +4,6 @@
  * flottin@gmail.com
  * 
  */
-var audioWinP1          = new Audio();
-var audioWinP2          = new Audio();
 var numberPlay          = null;
 var isEndGame           = null;
 var player1             = null;
@@ -24,11 +22,41 @@ var buttonEnable = true;
 var gameSet             = 1;
 
 /**
+* load game on document load
+*/
+$(document).ready(function() { 
+    initSounds(); 
+    buttonFactory();
+    initGame();
+});
+
+/**
+* init Sounds
+*/
+initSounds = function(){
+    sampleChangePlayer  = new RapidSoundsSample(
+        context, 
+        'medias/changePlayer.mp3', 0.1
+        );
+    sample  = new RapidSoundsSample(
+        context, 
+        'medias/dart2.mp3', 1
+    );
+    sampleplayer1  = new RapidSoundsSample(
+        context, 
+        'medias/testoo.mp3', 1
+    );
+    sampleplayer2  = new RapidSoundsSample(
+        context, 
+        'medias/rouge.low.mp3', 1
+    );
+
+}
+
+/**
 * init game
 */
 initGame = function(){
-    audioWinP1.src      = "medias/testoo.mp3";
-    audioWinP2.src      = "medias/rouge.low.mp3";
     buttonEnable        = true;
     gameSet             = 1;
     numberPlay          = 3;
@@ -57,39 +85,26 @@ initGame = function(){
 }
 
 /**
- * load game on document load
- */
-$(document).ready(function() {  
-    buttonFactory();
-    initGame();
-    $( ".keyPlayer" ).on( "touchstart click", minusResult );
-    $( ".keyMulti" ).on( "touchstart click", multiScore );
-    $( ".startButton" ).on( "touchstart click", savePlayers );
-    sample              = new RapidSoundsSample(
-                                        context, 
-                                        'medias/dart2.mp3', 1
-                                        );
-    sampleChangePlayer  = new RapidSoundsSample(
-                                        context, 
-                                        'medias/changePlayer.mp3', 0.1
-                                        );
-});
-
-/**
  * button factory 
  */
 buttonFactory = function(){
     for (i=0; i<=20 ;i++){
-        createButton(i, 'keyPlayer'); 
+        createButton(i, 'keyPlayer', 'btn' + i); 
     }
-    createButton(25, 'keyPlayer');
-    createButton(50, 'keyPlayer');
+    i=25;
+    createButton(i, 'keyPlayer', 'btn' + i);
+    i=50;
+    createButton(i, 'keyPlayer', 'btn' + i);
 
     for (i=1; i<=7 ;i++){
         createButtonEmpty(i, 'empty');
     }
     createButton("x2", 'keyMulti', 2);
     createButton("x3", 'keyMulti', 3);
+    
+    $( ".keyPlayer" ).on( "touchstart click", minusResult );
+    $( ".keyMulti" ).on( "touchstart click", multiScore );
+    $( ".startButton" ).on( "touchstart click", savePlayers );
 }
 
 /**
@@ -97,12 +112,14 @@ buttonFactory = function(){
  */
 createButton = function (i,  buttonName = '', buttonId = ''){
     newButtonWrapper = $("<span>").attr('class','button');     
-    newButtonWrapper.attr('id',i);     
+    newButtonWrapper.attr('id','ok'+i);     
     newButtonWrapper.appendTo(".numbers");
          
     newButton = $("<button>").attr('class',buttonName);     
     newButton.attr('id', buttonId);     
-    newButton.appendTo("#"+i).html(  i );     
+    newButton.appendTo("#ok"+i).html(  i ).trigger('create'); 
+       
+    $( "#"+buttonId ).on( "touchstart click", PlaySound );        
 }
 
 /**
@@ -160,8 +177,7 @@ minusResult = function(ev){
     }else{
         $(this).css({'background-color' : '#333333'});
         return true;
-    }
-    PlaySound();    
+    }   
     if(true == isEndGame) return false;
     
     multiManage();
@@ -235,34 +251,32 @@ minusResult = function(ev){
  * play sound calling lib audio.js
  */
 function PlaySound() {
-    sample.shootRound(0, 1, 1, 1);
+    if ( buttonEnable == true){
+        sample.shootRound(0.3);
+    }
 }
 
 /**
  * play sound calling lib audio.js
  */
 function PlaySoundChangePlayer() {
-    sampleChangePlayer.shootRound(0, 1, 1,  0.1 );
+    sampleChangePlayer.shootRound(0.5);
 }
 
 /**
  * 
  */
 function playSoundWin(currentPlayer) {
-    if ('player1'==currentPlayer)
-    audioWinP1.play();
-    else
-    audioWinP2.play();
+    playerSample = eval('sample'+currentPlayer)
+    playerSample.shootRound()
 }
 
 /**
  * 
  */
 function stopSoundWin(currentPlayer) {
-    if ('player1'==currentPlayer)
-        audioWinP1.pause();
-    else
-        audioWinP2.pause();
+    playerSample = eval('sample'+currentPlayer)
+    playerSample.stop()
 }
 
 /**
