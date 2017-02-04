@@ -37,10 +37,11 @@ $(document).ready(function() {
  * init Sounds
  */
 initSounds = function(){
-    sampleChangePlayer  = new RapidSoundsSample('medias/changePlayer.mp3', 0.3);
-    sample  = new RapidSoundsSample('medias/dart2.mp3', 0.2);
-    sampleplayer1  = new RapidSoundsSample('medias/testoo.mp3', 1);
-    sampleplayer2  = new RapidSoundsSample('medias/rouge.low.mp3', 1);
+    sample              = new RapidSoundsSample('medias/dart2.mp3', 0.2);
+    sampleError              = new RapidSoundsSample('medias/error.wav', 0.2);
+    sampleChangePlayer  = new RapidSoundsSample('medias/changePlayer.mp3', 0.5);
+    sampleplayer1       = new RapidSoundsSample('medias/testoo.mp3', 1);
+    sampleplayer2       = new RapidSoundsSample('medias/rouge.low.mp3', 1);
 }
 
 /*
@@ -162,6 +163,7 @@ hideSplash = function(ev){
  * last score was not multiplied by 2
  */
 endError = function(){
+    sampleError.shootRound();
     result=lastScore;
     numberPlay = 3;
     initDarts();
@@ -175,6 +177,7 @@ endError = function(){
  * minus the score
  */
 minusResult = function(ev){
+    
     ev.preventDefault();
     lastMulti = 1
 
@@ -224,6 +227,7 @@ minusResult = function(ev){
         if (result > 0){
             initDarts();
             if (numberPlay == 0){
+                
                 remainingDarts();
                 numberPlay=3;
                 buttonEnable = false;
@@ -263,7 +267,7 @@ minusResult = function(ev){
  */
 function PlaySound() {
     if ( buttonEnable == true){
-        sample.shootRound(0.3);
+        sample.shootRound();
     }
 }
 
@@ -271,7 +275,7 @@ function PlaySound() {
  * play sound calling lib audio.js
  */
 function PlaySoundChangePlayer() {
-    sampleChangePlayer.shootRound(0.5);
+    sampleChangePlayer.shootRound();
 }
 
 /*
@@ -375,8 +379,9 @@ saveData = function(){
  * change the player 
  */
 changePlayer = function(){
+    sampleChangePlayer.shootRound();
     buttonEnable =true;
-    PlaySoundChangePlayer();
+    //~ PlaySoundChangePlayer();
     if ('player1' == currentPlayer){
         currentPlayer       = "player2"; 
         currentPlayerName   = $(".player2Name")[0].innerText;

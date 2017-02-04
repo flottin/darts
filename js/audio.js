@@ -1,16 +1,21 @@
 /*
+ * create the audio context
+ */
+var context = new (window.AudioContext || window.webkitAudioContext)();
+if (!this.context.createGain)
+  this.context.createGain = this.context.createGainNode;
+if (!this.context.createDelay)
+  this.context.createDelay = this.context.createDelayNode;
+if (!this.context.createScriptProcessor)
+  this.context.createScriptProcessor = this.context.createJavaScriptNode;
+
+
+/*
  * class BufferLoader
  * load the sound as a buffer 
  */
 function BufferLoader( urlList, callback) {
-    this.context = new (window.AudioContext || window.webkitAudioContext)();
-    if (!this.context.createGain)
-      this.context.createGain = this.context.createGainNode;
-    if (!this.context.createDelay)
-      this.context.createDelay = this.context.createDelayNode;
-    if (!this.context.createScriptProcessor)
-      this.context.createScriptProcessor = this.context.createJavaScriptNode;
-
+this.context = context
     this.urlList      = urlList;
     this.onload       = callback;
     this.bufferList   = new Array();
@@ -65,7 +70,7 @@ BufferLoader.prototype.load = function() {
  */
 function RapidSoundsSample(theSound, soundVolume = 1) {
   var ctx = this;
-  var loader = new BufferLoader( [theSound], onLoaded);
+  var loader = new BufferLoader([theSound], onLoaded);
 this.context = loader.context
   function onLoaded(buffers) {
     ctx.buffers = buffers;
