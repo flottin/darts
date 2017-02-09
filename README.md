@@ -8,8 +8,8 @@
 
 ## todo
 
-[ ] add application cache
-[x] clean js code
+- [ ] add application cache
+- [x] clean js code
 
 
 
