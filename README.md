@@ -14,7 +14,7 @@
 
 
 ## url
-http://www.karatube.org/darts
+http://www.karatube.in/darts
 
 ## interesting code
 
